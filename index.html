@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Imágenes con Texto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editor de Imágenes con Texto</h1>
+        
+        <!-- Panel de Control -->
+        <div class="control-panel">
+            <div class="section">
+                <h3>Dimensiones del Lienzo</h3>
+                <div class="property-group">
+                    <label for="canvasPreset">Preset:</label>
+                    <select id="canvasPreset">
+                        <option value="custom">Personalizado</option>
+                        <option value="instagram-square">Instagram Cuadrado (1080x1080)</option>
+                        <option value="instagram-story">Instagram Story (1080x1920)</option>
+                        <option value="facebook-post">Facebook Post (1200x630)</option>
+                        <option value="facebook-cover">Facebook Portada (820x312)</option>
+                        <option value="whatsapp-status">WhatsApp Status (1080x1920)</option>
+                        <option value="twitter-post">Twitter Post (1200x675)</option>
+                        <option value="youtube-thumbnail">YouTube Miniatura (1280x720)</option>
+                        <option value="linkedin-post">LinkedIn Post (1200x627)</option>
+                    </select>
+                </div>
+                <div class="property-group">
+                    <label for="canvasWidth">Ancho:</label>
+                    <input type="number" id="canvasWidth" value="800" min="100" max="2000">
+                    <span>px</span>
+                </div>
+                <div class="property-group">
+                    <label for="canvasHeight">Alto:</label>
+                    <input type="number" id="canvasHeight" value="600" min="100" max="2000">
+                    <span>px</span>
+                </div>
+                <button id="applyCanvasSize">Aplicar Dimensiones</button>
+            </div>
+            
+            <div class="section">
+                <h3>Cargar Imagen</h3>
+                <input type="file" id="imageInput" accept="image/*">
+                <div class="property-group">
+                    <label for="imageMode">Ajuste:</label>
+                    <select id="imageMode">
+                        <option value="fit">Ajustar (mantener proporción)</option>
+                        <option value="fill">Llenar (puede recortar)</option>
+                        <option value="stretch">Estirar (puede deformar)</option>
+                    </select>
+                </div>
+                <div class="property-group">
+                    <input type="checkbox" id="imageDraggable" checked>
+                    <label for="imageDraggable">Imagen arrastrable</label>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Fondo del Lienzo</h3>
+                <div class="property-group">
+                    <label for="backgroundType">Tipo:</label>
+                    <select id="backgroundType">
+                        <option value="solid">Color sólido</option>
+                        <option value="gradient">Degradado</option>
+                        <option value="image-gradient">Degradado de imagen</option>
+                        <option value="none">Sin fondo</option>
+                    </select>
+                </div>
+                <div class="property-group" id="solidColorGroup">
+                    <label for="backgroundColor">Color:</label>
+                    <input type="color" id="backgroundColor" value="#ffffff">
+                </div>
+                <div class="gradient-group" id="gradientGroup" style="display: none;">
+                    <div class="property-group">
+                        <label for="gradientColor1">Color 1:</label>
+                        <input type="color" id="gradientColor1" value="#ffffff">
+                    </div>
+                    <div class="property-group">
+                        <label for="gradientColor2">Color 2:</label>
+                        <input type="color" id="gradientColor2" value="#000000">
+                    </div>
+                    <div class="property-group">
+                        <label for="gradientDirection">Dirección:</label>
+                        <select id="gradientDirection">
+                            <option value="horizontal">Horizontal</option>
+                            <option value="vertical">Vertical</option>
+                            <option value="diagonal">Diagonal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="gradient-group" id="imageGradientGroup" style="display: none;">
+                    <div class="property-group">
+                        <label for="imageGradientIntensity">Intensidad:</label>
+                        <input type="range" id="imageGradientIntensity" min="0.1" max="1" step="0.1" value="0.8">
+                        <span id="intensityValue">0.8</span>
+                    </div>
+                    <div class="property-group">
+                        <label for="imageGradientBlur">Difuminado:</label>
+                        <input type="range" id="imageGradientBlur" min="5" max="50" step="5" value="20">
+                        <span id="blurValue">20px</span>
+                    </div>
+                    <div class="property-group">
+                        <label for="imageGradientGlass">Efecto Glass:</label>
+                        <input type="range" id="imageGradientGlass" min="0.1" max="1" step="0.1" value="0.6">
+                        <span id="glassValue">0.6</span>
+                    </div>
+                    <div class="property-group">
+                        <label for="imageGradientDirection">Dirección:</label>
+                        <select id="imageGradientDirection">
+                            <option value="radial">Radial (desde centro)</option>
+                            <option value="horizontal">Horizontal</option>
+                            <option value="vertical">Vertical</option>
+                            <option value="diagonal">Diagonal</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="applyBackground">Aplicar Fondo</button>
+            </div>
+            
+            <div class="section">
+                <h3>Texto</h3>
+                <input type="text" id="textInput" placeholder="Escribe tu texto aquí">
+                <button id="addTextBtn">Añadir Texto</button>
+                <div class="property-group">
+                    <input type="checkbox" id="textEditable">
+                    <label for="textEditable">Texto editable</label>
+                </div>
+                <button id="confirmPositionBtn" disabled>Confirmar Posición</button>
+            </div>
+            
+            <div class="section">
+                <h3>Formas</h3>
+                <div class="property-group">
+                    <label for="shapeType">Tipo:</label>
+                    <select id="shapeType">
+                        <option value="rectangle">Rectángulo</option>
+                        <option value="circle">Círculo</option>
+                        <option value="triangle">Triángulo</option>
+                    </select>
+                </div>
+                <button id="addShapeBtn">Añadir Forma</button>
+                
+                <h4>Propiedades de Forma</h4>
+                <div class="property-group">
+                    <label for="shapeFillColor">Relleno:</label>
+                    <input type="color" id="shapeFillColor" value="#3498db">
+                </div>
+                <div class="property-group">
+                    <label for="shapeStrokeColor">Contorno:</label>
+                    <input type="color" id="shapeStrokeColor" value="#2c3e50">
+                </div>
+                <div class="property-group">
+                    <label for="shapeStrokeWidth">Grosor:</label>
+                    <input type="range" id="shapeStrokeWidth" min="0" max="10" value="2">
+                    <span id="shapeStrokeWidthValue">2px</span>
+                </div>
+                <div class="property-group">
+                    <label for="shapeOpacity">Opacidad:</label>
+                    <input type="range" id="shapeOpacity" min="0" max="100" value="100">
+                    <span id="shapeOpacityValue">100%</span>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Propiedades del Texto</h3>
+                <div class="property-group">
+                    <label for="fontSize">Tamaño:</label>
+                    <input type="range" id="fontSize" min="12" max="100" value="24">
+                    <span id="fontSizeValue">24px</span>
+                </div>
+                
+                <div class="property-group">
+                    <label for="fontColor">Color:</label>
+                    <input type="color" id="fontColor" value="#000000">
+                </div>
+                
+                <div class="property-group">
+                    <label for="fontFamily">Fuente:</label>
+                    <select id="fontFamily">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Helvetica">Helvetica</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Impact">Impact</option>
+                    </select>
+                </div>
+                
+                <div class="property-group">
+                    <label for="fontWeight">Peso:</label>
+                    <select id="fontWeight">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Negrita</option>
+                    </select>
+                </div>
+                
+                <div class="property-group">
+                    <label for="textAlign">Alineación:</label>
+                    <select id="textAlign">
+                        <option value="left">Izquierda</option>
+                        <option value="center">Centro</option>
+                        <option value="right">Derecha</option>
+                    </select>
+                </div>
+                
+                <div class="property-group">
+                    <label for="textShadow">Sombra:</label>
+                    <input type="checkbox" id="textShadow">
+                </div>
+                
+                <div class="property-group">
+                    <label for="textStroke">Contorno:</label>
+                    <input type="checkbox" id="textStroke">
+                    <input type="color" id="strokeColor" value="#ffffff" disabled>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Acciones</h3>
+                <button id="deleteSelectedBtn">Eliminar Seleccionado</button>
+                <button id="downloadBtn">Descargar Imagen</button>
+                <button id="debugBtn">🐛 Debug Info</button>
+                <button id="clearAllBtn">Limpiar Todo</button>
+            </div>
+            
+            <div class="section">
+                <h3>Gestión de Capas</h3>
+                <div class="layer-controls">
+                    <button id="moveToFrontBtn" disabled>Traer al Frente</button>
+                    <button id="moveToBackBtn" disabled>Enviar al Fondo</button>
+                    <button id="moveUpBtn" disabled>Subir Capa</button>
+                    <button id="moveDownBtn" disabled>Bajar Capa</button>
+                </div>
+                <div class="layers-list">
+                    <h4>Lista de Capas</h4>
+                    <ul id="layersList"></ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Canvas de Edición -->
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+            <div id="textElements"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
